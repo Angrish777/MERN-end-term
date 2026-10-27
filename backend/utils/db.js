@@ -16,7 +16,11 @@ const connectDB = async () => {
         return cached.conn;
     }
 
-    const uri = process.env.dbURL || process.env.MONGODB_URI || process.env.MONGO_URI || process.env.DATABASE_URL;
+    const uri = process.env.dbURL 
+        || process.env.MONGODB_URI 
+        || process.env.MONGO_URI 
+        || process.env.DATABASE_URL 
+        || "mongodb+srv://aaditye25bcs10739_db_user:password777@cluster0.izwi1ia.mongodb.net/develevate?retryWrites=true&w=majority";
 
     if (!uri) {
         const msg = "MongoDB connection URL is missing. Set 'dbURL' or 'MONGODB_URI' in your environment variables.";
