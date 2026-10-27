@@ -7,8 +7,7 @@ if (!cached) {
 }
 
 const connectDB = async () => {
-    // If mongoose already has an open connection, reuse it
-    if (mongoose.connection && mongoose.connection.readyState >= 1) {
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
         return mongoose.connection;
     }
 
@@ -23,12 +22,11 @@ const connectDB = async () => {
         || "mongodb+srv://aaditye25bcs10739_db_user:password777@cluster0.izwi1ia.mongodb.net/develevate?retryWrites=true&w=majority";
 
     if (!uri) {
-        const msg = "MongoDB connection URL is missing. Set 'dbURL' or 'MONGODB_URI' in your environment variables.";
-        console.error(msg);
-        throw new Error(msg);
+        throw new Error("MongoDB connection URL is missing. Set 'dbURL' or 'MONGODB_URI' in your environment variables.");
     }
 
     if (!cached.promise) {
+        mongoose.set("bufferCommands", false);
         cached.promise = mongoose.connect(uri, {
             serverSelectionTimeoutMS: 5000,
         }).then((m) => {
