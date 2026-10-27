@@ -7,15 +7,7 @@
     },
     "vite-project": {
       "root": "frontend/vite-project",
-      "framework": "vite",
-      "bindings": [
-        {
-          "type": "service",
-          "service": "backend",
-          "format": "url",
-          "env": "VITE_API_URL"
-        }
-      ]
+      "framework": "vite"
     }
   },
   "rewrites": [
@@ -26,9 +18,16 @@
       }
     },
     {
-      "source": "/(.*)",
+      "source": "/assets/(.*)",
       "destination": {
         "service": "vite-project"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "vite-project",
+        "path": "/index.html"
       }
     }
   ]

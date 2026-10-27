@@ -2,7 +2,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === "production" || !!process.env.VERCEL;
+const JWT_SECRET = process.env.JWT_SECRET || "develevate-jwt-secret-key-production";
 
 const cookieOptions = {
     httpOnly: true,
@@ -19,7 +20,7 @@ const publicUser = (user) => ({
 });
 
 const issueToken = (res, user) => {
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
         expiresIn: "7d"
     });
     res.cookie("token", token, cookieOptions);
@@ -67,7 +68,8 @@ export const register = async (req, res) => {
             user: publicUser(user)
         });
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal server error" });
+        console.error("Register error:", error);
+        return res.status(500).json({ success: false, message: error.message || "Internal server error" });
     }
 };
 
@@ -99,7 +101,8 @@ export const login = async (req, res) => {
             user: publicUser(user)
         });
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal server error" });
+        console.error("Login error:", error);
+        return res.status(500).json({ success: false, message: error.message || "Internal server error" });
     }
 };
 

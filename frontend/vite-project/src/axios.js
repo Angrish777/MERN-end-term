@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8084";
+// In production on Vercel, if VITE_API_URL is not set, default to "" (relative URL)
+// so requests hit the same origin (/api/...) handled by Vercel rewrites.
+const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "" : "http://localhost:8084");
 
 const api = axios.create({
     baseURL: API_URL,

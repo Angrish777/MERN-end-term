@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
+const JWT_SECRET = process.env.JWT_SECRET || "develevate-jwt-secret-key-production";
+
 export const authenticate = async (req, res, next) => {
     try {
         const token = req.cookies?.token;
@@ -12,7 +14,7 @@ export const authenticate = async (req, res, next) => {
             });
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET);
         const user = await User.findById(decoded.userId).select("-password");
 
         if (!user) {
